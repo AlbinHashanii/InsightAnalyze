@@ -1,0 +1,54 @@
+<div class="container">
+  <footer class="footer">
+    <small>
+      Albin Hashani &copy; 2023 <br>
+    </small>
+    <nav>
+      <ul>
+        <li> <a href="https://www.linkedin.com/in/albin-hashani" class="link-unstyled">LinkedIn</a></li>
+        <li><%= link_to 'About', root_path, class: 'link-unstyled' %></li>
+      </ul>
+    </nav>
+  </footer>
+</div>
+
+<style>
+
+
+    .container {
+        flex: 1;
+        padding: 20px;
+    }
+
+    footer {
+        padding: 20px 0;
+        border-top: 1px solid #eaeaea;
+        color: #777;
+        position: sticky;
+        margin-top: auto; /* Push to the bottom */
+    }
+
+    footer a:hover {
+        color: #222;
+    }
+
+    footer small {
+        float: left;
+    }
+
+    footer ul {
+        float: right;
+        list-style: none;
+        display: flex;
+    }
+
+    footer ul li {
+        padding-left: 10px;
+    }
+
+    .link-unstyled {
+        text-decoration: none;
+        color: inherit;
+        cursor: pointer;
+    }
+</style>

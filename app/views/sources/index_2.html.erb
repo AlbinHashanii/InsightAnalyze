@@ -1,0 +1,16 @@
+<div class="container mt-5">
+  <h1 class="mb-4">Shto burimin</h1>
+  <%= form_for @source, url: create_source_path, method: :post, html: { class: 'form' } do |f| %>
+    <div class="form-group">
+      <%= f.label :url, "Emri" %>
+      <%= f.text_field :name, class: 'form-control mb-1', placeholder: "ex: BBC.com" %>
+      <%= f.label :url, "Source URL:" %>
+      <%= f.text_field :url, class: 'form-control mb-2', placeholder: "ex: https://www.example.com/" %>
+      <div class="form-check mb-3">
+        <%= f.check_box :trust_type, class: 'form-check-input', id: 'source_is_real' %>
+        <%= f.label :is_real, "Fact Checking Source?", class: 'form-check-label', for: 'source_is_real' %>
+      </div>
+    </div>
+    <%= f.submit 'Shto burimin', class: 'btn btn-primary' %>
+  <% end %>
+</div>

@@ -1,0 +1,2 @@
+class FactCheckingSource < ApplicationRecord
+end

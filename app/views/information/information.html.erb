@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chart Enhancement</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.8.0/dist/chart.min.js"></script>
+  <!-- Add any additional stylesheets or icon libraries here -->
+  <link rel="stylesheet" href="path/to/your/custom.css">
+</head>
+
+<body>
+
+<div class="container mt-1" style="border-radius: 15px; box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); padding: 20px; margin-top: 50px;">
+  <h1 class="mb-4">Informacione mbi lajmet</h1>
+
+  <!-- Count of All Items Section -->
+  <div class="card mb-4">
+    <div class="card-body d-flex align-items-center">
+      <div class="count-square bg-success">
+        <i class="bi bi-file-earmark-text text-white"></i>
+      </div>
+      <h3 class="mb-0">Numri i pergjithshem i artikujve:  <%= @all_items.count %></h3>
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- Most Prolific Author -->
+    <div class="col-md-4">
+      <div class="card" style="background-color: #ABEBC6; border: 2px solid #58D68D">
+        <div class="card-body">
+          <h3 class="card-title">
+            <% if @most_prolific_author.present? %>
+              <% prolific_author_articles = @all_items.select { |item| item.author == @most_prolific_author } %>
+              <p class="card-text">
+                <i class="bi bi-person-fill"></i>
+                <%= @most_prolific_author %> (
+                <%= @most_prolific_source %> )
+                <br><%= prolific_author_articles.count %>
+              </p>
+            <% else %>
+              <p class="card-text">No articles found.</p>
+            <% end %>
+          </h3>
+        </div>
+        <div class="card-footer">
+          <i class="bi bi-person-fill"></i> Autori/ja me me se shumti artikuj
+        </div>
+      </div>
+    </div>
+
+    <!-- Most Prolific Source -->
+    <div class="col-md-4">
+      <div class="card" style="background-color: #E0F7FA; border: 2px solid #00BCD4;">
+        <div class="card-body">
+          <h3 class="card-title">
+            <% if @most_prolific_source.present? %>
+              <p class="card-text">
+                <i class="bi bi-newspaper"></i>
+                <%= @most_prolific_source %>
+                <br>
+                <%= @all_items.select { |item| item.source == @most_prolific_source }.count %>
+              </p>
+            <% else %>
+              <p class="card-text">No articles found.</p>
+            <% end %>
+          </h3>
+        </div>
+        <div class="card-footer">
+          <i class="bi bi-newspaper"></i> Burimi me me se shumti artikuj
+        </div>
+      </div>
+    </div>
+
+    <!-- Fastest Source -->
+    <div class="col-md-4">
+      <div class="card" style="background-color: #D6EAF8; border: 2px solid #3498DB">
+        <div class="card-body">
+          <h3 class="card-title">
+            <% if @fastest_source.present? %>
+              <p class="card-text">
+                <i class="bi bi-stopwatch"></i>
+                <%= @fastest_source %>
+                <br>
+                <h6 style="color: #D6EAF8"><%= @fastest_source%></h6>
+
+              </p>
+            <% else %>
+              <p class="card-text">No articles found.</p>
+            <% end %>
+          </h3>
+        </div>
+        <div class="card-footer">
+          <i class="bi bi-stopwatch"></i> Burimi me i shpejte
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Top 5 Authors Chart -->
+  <div class="row mt-4">
+    <div class="col-md-6">
+      <h3>Top 5 Autoret</h3>
+      <div class="chart-container">
+        <canvas id="authorsChart" width="600" height="300"></canvas>
+        <div id="authorValues" class="chart-values"></div>
+      </div>
+    </div>
+
+    <!-- Top 5 Sources Chart -->
+    <div class="col-md-6">
+      <h3>Top 5 Burimet</h3>
+      <div class="chart-container">
+        <canvas id="sourcesChart" width="600" height="300"></canvas>
+        <div id="sourcesValues" class="chart-values"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Chart.js initialization for Top 5 Authors
+    var sampleAuthorNames = ['<%= @author_names[0] %>', '<%= @author_names[1] %>', '<%= @author_names[2] %>', '<%= @author_names[3] %>', '<%= @author_names[4] %>'];
+    var sampleAuthorValues = [<%= @author_values[0] %>, <%= @author_values[1] %>, <%= @author_values[2] %>, <%= @author_values[3] %>, <%= @author_values[4] %>];
+
+
+    var ctxAuthors = document.getElementById('authorsChart').getContext('2d');
+    var sourcesChart = new Chart(ctxAuthors, {
+      type: 'bar',
+      data: {
+        labels: sampleAuthorNames,
+        datasets: [{
+          data: sampleAuthorValues,
+          backgroundColor: ['#3498db', '#2ecc71', '#f39c12', '#e74c3c', '#9b59b6'],
+          hoverBackgroundColor: ['#2980b9', '#27ae60', '#f5b041', '#c0392b', '#8e44ad'],
+          borderWidth: 2,
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'bottom',
+          },
+          tooltip: {
+            callbacks: {
+              label: function (context) {
+                return context.label + ': ' + context.parsed + ' Articles';
+              },
+            },
+          },
+        },
+      },
+    });
+
+
+    // Chart.js initialization for Top 5 Sources
+    var sampleSourceNames = ['<%= @source_names[0] %>', '<%= @source_names[1] %>', '<%= @source_names[2] %>', '<%= @source_names[3] %>', '<%= @source_names[4] %>'];
+    var sampleSourceValues = [<%= @source_values[0] %>, <%= @source_values[1] %>, <%= @source_values[2] %>, <%= @source_values[3] %>, <%= @source_values[4] %>];
+
+    var ctxSources = document.getElementById('sourcesChart').getContext('2d');
+    var sourcesChart = new Chart(ctxSources, {
+      type: 'pie',
+      data: {
+        labels: sampleSourceNames,
+        datasets: [{
+          data: sampleSourceValues,
+          backgroundColor: ['#3498db', '#2ecc71', '#f39c12', '#e74c3c', '#9b59b6'],
+          hoverBackgroundColor: ['#2980b9', '#27ae60', '#f5b041', '#c0392b', '#8e44ad'],
+          borderWidth: 2,
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'bottom',
+          },
+          tooltip: {
+            callbacks: {
+              label: function (context) {
+                return context.label + ': ' + context.parsed + ' Articles';
+              },
+            },
+          },
+        },
+      },
+    });
+  </script>
+
+</div>
+
+</body>
+
+</html>

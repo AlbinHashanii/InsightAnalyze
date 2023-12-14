@@ -1,0 +1,59 @@
+<!-- app/views/all_items/show.html.erb -->
+
+<% background_color, border_color = case @item.classification
+                                    when 'true' then ['#C8E6C9', '#2ECC71 ']
+                                    when 'false' then ['#FFCDD2', '#B71C1C']
+                                    when 'fact checking' then ['#FCF3CF', '#FFD600']
+                                    when 'Clickbait' then ['#BBDEFB', '#2196F3']
+                                    else ['#FFFFFF', '#000000'] # Default colors
+                                    end %>
+
+<div class="container">
+  <div class="row">
+    <div class="col-lg-8">
+      <div class="card" style="background-color: <%= background_color %>; border: 2px solid <%= border_color %>;">
+        <% if @item.image_url.present? %>
+          <img src="<%= @item.image_url %>" class="card-img-top" alt="Image">
+        <% end %>
+        <div class="card-body">
+          <h1 class="card-title"><%= highlight(@item.title, @similar_words_array) %></h1>
+          <p class="card-subtitle mb-2 text-muted"><strong>Source:</strong> <%= @item.source %></p>
+          <p class="card-text"><strong>Author:</strong> <%= @item.author %></p>
+          <p class="card-text"><strong>Description:</strong> <%= @item.text %></p>
+          <p class="card-text"><strong>Published Date:</strong> <%= @item.pub_date.strftime('%B %d, %Y') if @item.pub_date.present?%></p>
+          <p class="card-text"><strong>Created at:</strong> <%= @item.created_at %></p>
+          <p class="card-text"><%= @item.content %></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="card" style="background-color: <%= background_color %>; border: 2px solid <%=border_color  %>">
+        <div class="card-body">
+          <h2 class="card-title"><%= @klasifikimi %></h2>
+          <% if @item.classification == 'true' %>
+            <p>Ky artikull eshte nga nje burim i sigurte dhe si i tille klasifikohet "i vertete" ne menyre automatike.</p>
+          <% elsif @item.classification == 'false' %>
+            <p>This article has been classified as <strong>False</strong>. Be cautious as it may contain misinformation.</p>
+          <% elsif @item.classification == 'fact checking' %>
+            <p> Ky artikull eshte klasifikuar si i tille nga <b><%= @item.source %></b>. &nbsp;
+                Ky artikull eshte klasifikuar si i rreme me metoden Fact Checking.
+            </p>
+          <% elsif @item.classification == 'Clickbait' %>
+            <p>Ky artikull është klasifikuar si 'Clickbait' pasi përmban fjalët: <b><%= @similar_words_array.flatten.join(', ') %></b></p>
+        <% else %>
+            <p>No classification information available.</p>
+          <% end %>
+        </div>
+      </div>
+
+        <%= link_to 'Kthehu prapa', session.delete(:previous_url) || items_path , class: 'btn mt-2', style: "background-color: #{background_color}; border: 2px solid #{border_color} " %>
+
+    </div>
+
+
+
+
+  </div>
+</div>
+

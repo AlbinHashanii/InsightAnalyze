@@ -1,0 +1,2 @@
+class FastestSource < ApplicationRecord
+end

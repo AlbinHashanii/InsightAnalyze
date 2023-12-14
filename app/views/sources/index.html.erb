@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Lista e burimeve</title>
+  <style>
+      .green-check {
+          color: #4CAF50; /* Green color */
+          font-size: 24px; /* Increase font size */
+          margin-right: 5px; /* Add some spacing between symbol and text */
+      }
+
+      .magnifying-glass {
+          color: #337ab7; /* Blue color for magnifying glass */
+          font-size: 24px; /* Increase font size */
+          margin-right: 5px; /* Add some spacing between symbol and text */
+      }
+
+      .list-group-item {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+      }
+
+      .symbol {
+          flex-shrink: 0;
+      }
+
+      .explanation {
+          text-align: right;
+          font-style: italic;
+          font-size: 14px;
+          margin-top: 10px;
+          color: grey;
+      }
+
+      .title-container {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+      }
+  </style>
+</head>
+<body>
+<div class="container  mb-5">
+  <div class="title-container">
+    <h1 class="mb-4">Lista e burimeve(<%= @sources.count %>)</h1>
+    <div class="explanation">
+      <p style="font-size: 17px"><span class="green-check">&#10003;</span> - Permban lajme te verteta , <span class="magnifying-glass">&#128269;</span> - Burimi eshte Fact Checking</p>
+    </div>
+  </div>
+  <div class="mb-3 d-flex justify-content-between align-items-center">
+    <%= link_to 'Shto burim', add_source_path, class: 'btn btn-primary' %>
+  </div>
+  <div class="list-group">
+    <% @sources.each do |source| %>
+      <div class="list-group-item" data-toggle="collapse" data-target="#source<%= source.id %>">
+        <div class="col-8">
+          <h5 class="m-2"><%= source.name %></h5>
+        </div>
+        <div class="col-3 text-right">
+          <h6 class="m-2" style="color: grey"><%= source.url %></h6>
+        </div>
+        <div class="symbol">
+          <% if source.trust_type == 'true' %>
+            <span class="green-check">&#10003;</span>
+          <% elsif source.trust_type == 'fact checking' %>
+            <span class="magnifying-glass">&#128269;</span>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+</body>
+</html>
